@@ -1,0 +1,454 @@
+# Linux
+## General
+### Docker
+#### Docker Cli
+- Image
+    ```bash
+    # List all Image
+    docker images
+    # List all Image ID only
+    docker image -q
+    #Filter Only the environment and show the tag together (this was checking what has been download only) --optional
+    docker images --filter "reference=<registry url>/<folder>/*" --format "{{.Repository}}:{{.Tag}}"  
+    #Delete Image
+    docker rmi <Image ID/Image Name:Version>
+    #Delete Unused Image
+    docker rmi -f $(docker image -f "dangling=true" -q)
+
+    ```
+  
+- Container
+    ```bash
+    #List Running Container 
+    docker ps
+    #List all Container
+    docker ps -a
+	#Run a container
+	docker run 
+	#Run a container with detach mode
+	## restart can be always, unless-stopped
+	docker run -d -p <host port>:<container port> --restart=always --name <container name> <image name>:<image version>
+	#Run a container with interactive shell
+	##shell can be /bin/bash, /bin/sh
+	docker run -it <image name>:<image version> <type of shell>
+	#Run a container and moutning host volume
+	docker run -v <host volume path location>:<container path location> <image name>:<image version
+	
+
+    ```
+
+#### Docker Compose
+### Kubernetes (K8S)
+### LXC/LXD
+- Image
+```bash
+#List image
+lxc image list
+#List image (specific server)
+lxc image list <image server>
+#Create image with fingerprint
+lxc image alias create <image name> <image fingerprint>
+#List image (remote)
+lxc remote list
+#Copy remote image to local
+lxc image copy <remote server name>:<version>/<architecture> local: --alias <local image name>
+#Import container
+lxc image import <tar ball path> --alias <local image name>
+#Publish image (Stop existing container before publish)
+lxc publish --publish <existing container name> --alias=<local image name>
+#Publish image (without stopping container and need take snapshot first then publish the snapshot)
+lxc snapshot <container name> <snapshot name>
+lxc publish <container name>/<snapshot name> --alias <image name>
+#Export 
+lxc image export <image name>
+```
+- Container
+```bash
+#Initialization
+lxd init
+#Attach console
+lxc console <container name>
+#List container
+lxc list
+#List container with specific column
+<<'Explaination'
+4 - IPv4 address
+
+6 - IPv6 address
+
+a - Architecture
+
+c - Creation date
+
+n - Name
+
+p - PID of the container's init process
+
+P - Profiles
+
+s - State
+
+S - Number of snapshots
+
+t - Type (persistent or ephemeral)
+
+Explaination
+
+lxc list --column "nsapt"
+
+#Enter shell of the container
+lxc exec <container name> <command>
+#Enter shell (specific shell) of the container
+##shell can be sh, bash
+lxc exec <container name> <shell>
+#Enter shell with specific user
+lxc exec <container name> -- sudo --user <user in container> --login
+#Launch a new container
+lxc launch <image server>:<distro>/<version>/<architecture> <container name>
+#Launch a new container without running it
+lxc init <image server>:<distro>/<version>/<architecture> <container name>
+#Copy existing container name
+lxc copy <exisiting container name> <new container name>
+#Operation of container
+lxc start <container name>
+lxc stop <container name>
+lxc restart <container name>
+lxc pause <container name>
+lxc delete <container name>/<snapshot name>
+#Show info for the container name
+lxc info <container name>
+#Take a snapshot of the container
+lxc snapshot <container name> <snapshot name>
+#Restore snapshot for the container
+lxc restore <container name> <snapshot name>
+#Rename a snapshot of the container
+lxc move <container name>/<snapshot name> <container name>/<new snapshot name>
+#Copy file from container
+lxc file pull <container name>:<file path in the container> <host file path>
+#Copy file to container
+lxc file push <host file path> <container name>:<file path in the container>
+```
+- operation
+```bash
+#List backgroud operation (sometimes lxc command not execute correctly and it might have schedule image update in the background)
+lxc operation list
+```
+
+### Ansible
+#### ansible command
+   ```bash
+   #Test host connectivity (SSH Connection from Ansible to host )
+   ## Can use all to  check all host group
+   ansible <host group name> -m ping
+   #Execute shell command on remote host
+   ansible <host group name> -m shell -a "<command to be execute>"
+   ```
+#### ansible-playbook
+```bash
+#Execute playboook with priviledge user password prompt
+ansible-playbook -i <inventory file> --ask-become-pass
+#Execute playbook  with priviledge user password prompt and decrypt ansible vault file
+ansible-playbook -i <inventory file> --ask-become-pass --ask-vault-pass
+```
+#### ansible-vault
+```bash
+#Encrypt file
+ansible-vault encrypt <file name>.yml
+#View file
+ansible-vault view <file name>.yml
+#Edit file
+ansible-vault edit <file name>.yml
+#Decrypt File
+ansible-vault decrypt <file name>.yml
+```
+### Text Editor
+#### Vim
+- Delete all lines
+	Enter command mode
+	Move cursor to end of target line
+	input command `:.,$d` press `Enter`
+- Find and Replace
+	Enter Command Mode
+	Input command `:%s/<target text>/<replace text>/g` to replace without confirmation
+	OR
+	Input command `:%s/<target text>/<replace text>/gc` to replace with confirmation 
+- Multiple Line input at the same position
+	Enter Command mode
+	Press `v` to enter vertical select
+	Move cursor how many line need to be input with the same position
+	Press `Shift + i`
+	Enter the text (it will only display at the first line)
+	Press `Esc`
+	the remaining line will start appearing with the text you have input at the first line
+	
+### View File
+#### Pager
+##### less
+```bash
+# Display Line Number
+less -N <file name>
+# Follow the file (live update and pause with Ctrl +C but still inside less pager)
+less +F <file name>
+```
+- Go to line number, press ":" then enter line number you plan to navigate
+- After navigate to the specific line, you may want to edit the file and now you may press "v" to editor default text editor to make the changes and you may save (based on your text editor) and it will return to less pager again
+##### more
+#### Stream Editor
+##### sed
+```bash
+# without making changes, just preview
+sed  "s/<text to replace>/<replace with>/g" <file name>
+# making changes
+sed -i "s/<text to replace>/<replace with>/g" <file name>
+```
+##### head
+```bash
+# Show first 10 line from the file
+head <file name>
+# Show first number of line from the file
+head -n <line number> <file name>
+
+```
+##### tail
+```bash
+# Show last 10 line from the file
+tail <file name>
+# Show last number of line from the filoe
+tail -n <line number> <file name>
+# Show live update of at the end of a file
+tail -f <file name>
+```
+##### grep
+```bash
+# search match string from the file
+grep <simple word pattern> <file name>
+# search match string from the directory
+grep -r <simple word pattern> <directory name>
+# search invert match string
+grep -v <simple world pattern> <file name>
+# search with and operator
+grep -E "<condition 1>.*<condition 2>" <file name>
+# search with or operator
+grep -E "<condition 1>|<condition 2>" <file name>
+egrep "<condition 1>|<condition 2>" <file name>
+# search with line nearby with same number of before and after
+grep -C <number line before and after> <simple world pattern> <filename>
+# search PID with process name
+pgrep <process name>
+```
+#### heredoc
+
+### File
+#### find
+```bash
+#Find with file type and name
+find <directory> -type <f for file /d for directory> -name <file name pattern>
+#Find with file type and name (no case sensitive)
+find <directory> -type <f for file /d for directory> -iname <file name pattern>
+#Find with user or group
+find <directory> -user <user name>
+find <directory -group <group name>
+#Find file base on size
+find <directory> -size <sizing>
+find <directory -size +<greater than size> -<lesser than size>
+#Find file that match condition and delete (if the list too long might fail to remove, try to output find command to a text file and use for loop to delete instead)
+find <directory> -type f -name <file name pattern> -exec rm -f {} \;
+
+```
+#### locate
+
+### Network
+#### Netstat,ss
+#### Iftop
+#### nc
+    ```bash
+    #test port without viewing the respond
+    nc -zv <ip address> <port>
+    ```
+#### Haproxy
+```bash
+#check if configuration is valid
+haproxy -c -f <haproxy config file>
+```
+#### Nginx
+```bash
+#check if configuration is valid
+nginx -t
+```
+#### iptables
+```bash
+iptables -L
+iptables -t nat -L
+iptables -L --line-numbers
+iptables -A <chain> <rules>
+iptables -D <chain> rules
+iptables-save 
+iptables-restore
+```
+#### NetPlan
+```bash
+netplan try
+netplan apply
+netplan apply --debug
+```
+#### OpenSSL
+- Generate Random Byte
+  ```bash
+  openssl rand -hex <number of digits>
+  openssl rand -base54 <number of digits>
+  ```
+- View OpenSSL related document
+  ```bash
+  openssl x509 -in <crt file> -noout -text | less
+  openssl crl -in <crl file> -noout -text | less
+  ```
+#### Rsync
+```bash
+rsync -avhe ssh --progress <source path> <SSH Hostname/IP>:<destination path>
+```
+#### SSH
+```bash
+#ssh local port forward with 2 ports
+ssh -L <localport1>:localhost:<remote machine service port1> -L <localport2>:localhost:<remote machine service port2>  <username>@<remote machine> -i <private key path>
+#sshfs connection
+sshfs -o allow_other -o ro,IdentityFile=<path to private key> <ssh username>@<ssh host>:<remote path> <localpath>
+```
+### Loop
+#### For
+#### While
+
+### Mail
+```bash
+echo "<Body>" | mutt -s "<Subject>" <Recipient mail> -a <attachment>
+mail -s <subject> <Recipient mail>
+```
+### Package Manger
+- apt
+- dpkg
+- yum
+- rpm
+
+### Screen and Tmux
+### Databases
+#### MySQL
+```bash
+#Check Uptime
+mysqladmin status
+#Using MySQL Client to connect MySQL Server
+mysql -u <username> -p -D <database> -h <ip>
+#Dumping Logical Backup
+mysqldump --routines --triggers --single-transaction -u <user> -p -D <database>
+#Dumping Logical Backup with compress output and timestamp in file name
+mysqldump --routines --triggers --single-transaction -u <user> -p -D <database> | gzip -9 > <name>-$(date +%Y%m%d-%H%M%S).tar.gz
+
+#Read the compress file with pager
+zcat <name>-<timestamp>.tar.gz | less
+#View Binary Log
+mysqlbinlog <bin log file> --base64-output=DECODE-ROWS
+```
+
+# Windows
+## PowerShell
+### Download Files
+```powershell
+Invoke-WebRequest -UseBasicParsing "<URL>" -OutFile <filename>
+Start-BitsTransfer -Source "<URL>" -Destination <filename>
+```
+### Port Test
+```powershell
+Test-NetConnection <url/ip> -p <port number>
+```
+### Start-Process
+### Robocopy
+```powershell
+robocopy \\<source directory> <destination directory> /E /R:5 /W:5 /TBD /V /MT:64 /B
+```
+### Refresh Shell Environment
+```powershell
+
+```
+## Cmd
+### net use
+```bat
+net use <drive letter>: \\<UNC Path/IP>\<ShareName> /user:<username>
+net use <drive letter>: /delete
+```
+### netsh
+```bat
+::adjust mtu value
+netsh interface ipv4 show subinterface
+netsh interface ipv4 set subinterface “<Name of the interface>” mtu=<mtu value> store=persistent
+
+::port forward (TCP only), connect address cannot  be loopback address
+::show current port forward rules
+netsh interface portproxy show all
+::reset/ remove all port forward rules
+netsh interface portproxy reset
+::add port forward port 9000
+netsh interface portproxy add v4tov4 listenaddress=127.0.0.1 listenport=9000 connectaddress=192.168.0.10 connectport=80
+::delete port forward 3340
+netsh interface portproxy delete v4tov4 listenport=3340 listenaddress=10.1.1.110
+
+```
+
+# FortiOS
+- Sniffer
+  ```sh
+  diagnose sniffer packer <interface> "port <port number>"
+  # available value --> port, host
+  ```
+- Ping
+  ```sh
+  #change ping source ip
+  execute ping --option source <source ip>
+  #then start ping command
+  execute ping <ip address>
+  ```
+- HA
+  ```sh
+  #trigger ha synchronization
+  execute ha synchorize start
+  #check ha status
+  get system ha status
+  #diagnose ha synchronization isue
+  diagnose sys ha
+  #Manage another ha unit via Cli
+  execute ha manage <id>
+  ```
+- PPPOE
+  ```sh
+  #manual trigger pppoe connection
+  execute interface pppoe-reconnect <interface name>
+  ```
+- Top
+  ```sh
+  diagnose sys top 1 10
+  ```
+- SSL VPN
+  ```sh
+  #add user with email as 2FA
+  config user local
+  edit "<username"
+  set two-factor email
+  set email-to <email address>
+  end
+  #ssl vpn monitor (check ssl vpn connection)
+  get vpn ssl monitor
+
+  ```
+- Debug
+  ```sh
+  #clear debug settings
+  diag debug reset
+  #turn on debugging
+  diagnose debug enable
+  diagose debug console timestamp enable
+  diagose debug application <application name> -1
+  #available value pppoed hasync hatalk
+  diagose debug disable
+  ```
+# MacOS
+## Restart App Launcher if it hung
+  # AWS
+  ## Cli
+
