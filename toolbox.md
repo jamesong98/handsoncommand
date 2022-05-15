@@ -428,7 +428,7 @@ netsh interface portproxy delete v4tov4 listenport=3340 listenaddress=10.1.1.110
   ```sh
   #add user with email as 2FA
   config user local
-  edit "<username"
+  edit "<username>"
   set two-factor email
   set email-to <email address>
   end
