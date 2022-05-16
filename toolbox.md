@@ -38,6 +38,24 @@
     ```
 
 #### Docker Compose
+```bash
+#Pull docker image based on compose file
+docker-compose pull
+#Build docker container based on compose file
+docker-compose build
+#Push docker container image
+docker-compose push <service name>
+#Run docker compose stack
+docker-compose up
+#Check custom  docker compose file container status
+docker-compose -f <compose file> ps
+#Run docker compose stack by specify environment variables file
+docker-compose --env-file <environment variables file> up -d
+#Bring down docker compose stack
+docker-compose down
+#Resolve the variable, combine multiple compose stack into one (tweak in .env file)
+docker-compose config
+```
 ### Kubernetes (K8S)
 ### LXC/LXD
 - Image
@@ -261,10 +279,10 @@ find <directory> -type f -name <file name pattern> -exec rm -f {} \;
 #### Netstat,ss
 #### Iftop
 #### nc
-    ```bash
-    #test port without viewing the respond
-    nc -zv <ip address> <port>
-    ```
+```bash
+#test port without viewing the respond
+nc -zv <ip address> <port>
+```
 #### Haproxy
 ```bash
 #check if configuration is valid
@@ -448,7 +466,13 @@ netsh interface portproxy delete v4tov4 listenport=3340 listenaddress=10.1.1.110
   diagose debug disable
   ```
 # MacOS
-## Restart App Launcher if it hung
+## Relaunch Finder if it hung
+- Option Key -> Right Click Finder -> Relaunch Finder
+- Click Apple Icon -> Hold Shift Key -> Force Quit Finder
+- Open Terminal then type
+```sh
+killall Finder
+```
   # AWS
   ## Cli
 
