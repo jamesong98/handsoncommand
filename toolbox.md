@@ -347,6 +347,43 @@ mail -s <subject> <Recipient mail>
 - rpm
 
 ### Screen and Tmux
+- Screen
+ 1. Ctrl + a + c -- Create new window
+ 2. Ctrl + a + " -- List all window 
+ 3. Ctrl + a + \<num\> -- Switch to window number
+ 4. Ctrl + a + n -- Next Window
+ 5. Ctrl + a + p -- Previous Window
+ 6. Ctrl + a + Shift + a -- Rename current window 
+ 7. Ctrl + a + Shift + S -- Split horizontal
+ 8. Ctrl + a + | -- Split vertical
+ 9. Ctrl + a + tab -- Switch the cursor to another region
+ 10. Ctrl + a + Shift + q -- Close all region but keep current
+ 11. Ctrl + a + Shift + x -- Close the current region
+ 12. Ctrl + a + d -- detach window
+ 13. Ctrl + a + Shift + h -- Activate logging and will save to home directory
+ 14. Ctrl + a + k -- Kill screen window
+ 15. Ctrl + a + \[ -- Enter Copy mode, move your cursor to start text -> press space -> highlight range -> press space again -> Esc
+ 16. Ctrl + a + \] -- Enter Paste
+ 17. Ctrl +a + Esc -- Enter Scrolling mode and use arrow key to start scrolling, can use less pager style also
+	
+```bash
+#Start a Name Session
+screen -S <session name>
+#Reattach an existing screen session
+screen -r
+screen -r <session number from screen -ls>
+#Reattach an existing attach screen
+screen -dr
+#Listing screen session
+screen -ls
+#Activate logging
+screen -L
+#Entering the existing session (Multi user in same screen)
+screen -x <session name>
+```
+- Tmux
+```bash
+```
 ### Databases
 #### MySQL
 ```bash
@@ -464,6 +501,15 @@ netsh interface portproxy delete v4tov4 listenport=3340 listenaddress=10.1.1.110
   diagose debug application <application name> -1
   #available value pppoed hasync hatalk
   diagose debug disable
+  ```
+  - Interface MTU
+  ```sh
+  #Normally MTU was 1500, may try 1496 or 1472
+  config system interface
+	  edit <interface name>
+		  set mtu-override enable
+		  set mtu <mtu value>
+  end
   ```
 # MacOS
 ## Relaunch Finder if it hung
