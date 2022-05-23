@@ -521,4 +521,14 @@ killall Finder
 ```
   # AWS
   ## Cli
+  ## RDS
+  - Microsoft SQL Server
+  ```sql
+  #ONLINE a database
+  EXEC rdsadmin.dbo.rds_set_database_online `<DB Name>`
+  #Rename a database
+  EXEC rdsadmin.dbo.rds_modify_db_name N'<DB Name>', N'<New Name>' 
+  GO
+  
+  ```
 
