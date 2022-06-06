@@ -422,6 +422,11 @@ robocopy \\<source directory> <destination directory> /E /R:5 /W:5 /TBD /V /MT:6
 ```powershell
 
 ```
+### Filtering Command Output Text
+```powershell
+Get-Process | Select-String "<Pattern>"
+Get-Service| Out-String -stream | Select-String -Pattern "<Pattern>"
+```
 ## Cmd
 ### net use
 ```bat
