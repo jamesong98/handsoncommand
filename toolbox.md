@@ -390,11 +390,11 @@ screen -x <session name>
 #Check Uptime
 mysqladmin status
 #Using MySQL Client to connect MySQL Server
-mysql -u <username> -p -D <database> -h <ip>
+mysql -u <username> -p  <database> -h <ip>
 #Dumping Logical Backup
-mysqldump --routines --triggers --single-transaction -u <user> -p -D <database>
+mysqldump --routines --triggers --single-transaction -u <user> -p  <database>
 #Dumping Logical Backup with compress output and timestamp in file name
-mysqldump --routines --triggers --single-transaction -u <user> -p -D <database> | gzip -9 > <name>-$(date +%Y%m%d-%H%M%S).tar.gz
+mysqldump --routines --triggers --single-transaction -u <user> -p  <database> | gzip -9 > <name>-$(date +%Y%m%d-%H%M%S).tar.gz
 
 #Read the compress file with pager
 zcat <name>-<timestamp>.tar.gz | less
