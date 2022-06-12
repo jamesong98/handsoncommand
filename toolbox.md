@@ -320,6 +320,16 @@ netplan apply --debug
   openssl x509 -in <crt file> -noout -text | less
   openssl crl -in <crl file> -noout -text | less
   ```
+- View SSH Key FingerPrint
+```bash
+#SHA1 (AWS display RSA Key Type that created by AWS), 
+openssl pkcs8 -in <path to private key> -inform PEM -outform DER -topk8 -nocrypt | openssl sha1 -c
+#MD5 (AWS Display RSA Key Type that import to AWS)
+openssl rsa -in <path to private key> -pubout -outform DER | openssl md5 -c
+ssh-keygen -l -E md5 -f <path to private key>
+#SHA256 (AWS Display ED25519 Key Type)
+ssh-keygen -l -f <path to private key>
+```
 #### Rsync
 ```bash
 rsync -avhe ssh --progress <source path> <SSH Hostname/IP>:<destination path>
@@ -536,4 +546,5 @@ killall Finder
   GO
   
   ```
+  
 
