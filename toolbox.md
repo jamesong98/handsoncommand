@@ -313,7 +313,7 @@ netplan apply --debug
 - Generate Random Byte
   ```bash
   openssl rand -hex <number of digits>
-  openssl rand -base54 <number of digits>
+  openssl rand -base64 <number of digits>
   ```
 - View OpenSSL related document
   ```bash
@@ -430,7 +430,7 @@ robocopy \\<source directory> <destination directory> /E /R:5 /W:5 /TBD /V /MT:6
 ```
 ### Refresh Shell Environment
 ```powershell
-
+$env:path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 ```
 ### Filtering Command Output Text
 ```powershell
