@@ -13,7 +13,9 @@
     #Delete Image
     docker rmi <Image ID/Image Name:Version>
     #Delete Unused Image
-    docker rmi -f $(docker image -f "dangling=true" -q)
+    docker rmi -f $(docker images -f "dangling=true" -q)
+    #Build Image
+    docker build -t <image tag name:version> <directory of Dockerfile>
 
     ```
   
@@ -33,6 +35,8 @@
 	docker run -it <image name>:<image version> <type of shell>
 	#Run a container and moutning host volume
 	docker run -v <host volume path location>:<container path location> <image name>:<image version
+	#Check each container statistic
+	docker stats
 	
 
     ```
@@ -282,6 +286,8 @@ find <directory> -type f -name <file name pattern> -exec rm -f {} \;
 ```bash
 #test port without viewing the respond
 nc -zv <ip address> <port>
+#Listen for connection
+nc -lvnp <port number>
 ```
 #### Haproxy
 ```bash
@@ -329,6 +335,10 @@ openssl rsa -in <path to private key> -pubout -outform DER | openssl md5 -c
 ssh-keygen -l -E md5 -f <path to private key>
 #SHA256 (AWS Display ED25519 Key Type)
 ssh-keygen -l -f <path to private key>
+```
+- Check Connection certificate
+```bash
+openssl s_client -connect <URL without https>:<port number> -showcerts
 ```
 #### Rsync
 ```bash
@@ -419,11 +429,22 @@ mysqlbinlog <bin log file> --base64-output=DECODE-ROWS
 Invoke-WebRequest -UseBasicParsing "<URL>" -OutFile <filename>
 Start-BitsTransfer -Source "<URL>" -Destination <filename>
 ```
+### Here docs
+```powershell
+$CONTENT = @"
+<Content of the file>
+"@
+Set-Content "<Path>" $CONTENT
+```
 ### Port Test
 ```powershell
 Test-NetConnection <url/ip> -p <port number>
 ```
 ### Start-Process
+```powershell
+# Start a process and wait it continue only proceed to next step
+Start-Process -FilePath <path for binary> -Args "<Argument to pass>" -Wait
+```
 ### Robocopy
 ```powershell
 robocopy \\<source directory> <destination directory> /E /R:5 /W:5 /TBD /V /MT:64 /B
@@ -436,6 +457,38 @@ $env:path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
 ```powershell
 Get-Process | Select-String "<Pattern>"
 Get-Service| Out-String -stream | Select-String -Pattern "<Pattern>"
+```
+### HyperV
+```powershell
+# Set VM to have nested CPU feature
+Set-VMProcessor -VMName <Name of the VM>  -ExposeVirtualizationExtensions $true
+
+```
+### msbuild
+```powershell
+#Build with command
+msbuild <path to csproj> /p:Configuration=Release /p:Platform=x64 /p:OutputPath=<artifact folder name>
+```
+### dotnet
+```powershell
+# Add NuGet Source
+dotnet nuget add source  "<URL>" -n "<Name>"
+# Restore NuGet Packages
+dotnet nuget restore
+# Build a csproj file
+dotnet build "<path to csproj>" -c Release -o <artifacts folder name>
+
+```
+### nuget
+```powershell
+# Add NuGet Source
+nuget sources add -Name "<Name>" -Source <URL>
+# Restore NuGet packages
+nuget restore
+# Add repository api key
+nuget setapikey "<api key value>" -Source <URL>
+```
+```
 ```
 ## Cmd
 ### net use
@@ -460,6 +513,8 @@ netsh interface portproxy add v4tov4 listenaddress=127.0.0.1 listenport=9000 con
 netsh interface portproxy delete v4tov4 listenport=3340 listenaddress=10.1.1.110
 
 ```
+
+
 
 # FortiOS
 - Sniffer
