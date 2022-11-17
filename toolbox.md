@@ -70,6 +70,8 @@ aws eks update-kubeconfig --name <AWS EKS Name> --role-arn <Role ARN to be assum
 kubectl config get-contexts
 #Check current context
 kubectl config current-context
+#Use context
+kubectl config use-context <context name>
 #Apply resource manifest
 kubectl apply -f <manifest file> --namespace <namespace>
 #Delete resource with manifest
