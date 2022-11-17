@@ -61,6 +61,60 @@ docker-compose down
 docker-compose config
 ```
 ### Kubernetes (K8S)
+```bash
+#Download KubeConfig (AWS)
+aws eks update-kubeconfig --name <AWS EKS Name> --region <Region> --profile <AWS Profile Name>
+#Download KubeConfig (AWS) with Assume Role
+aws eks update-kubeconfig --name <AWS EKS Name> --role-arn <Role ARN to be assume> --region <Region> --profile <AWS Profile Name>
+#List Context
+kubectl config get-contexts
+#Check current context
+kubectl config current-context
+#Apply resource manifest
+kubectl apply -f <manifest file> --namespace <namespace>
+#Delete resource with manifest
+kubectl delete -f <manifest file> --namespace <namespace>
+#Set Editor
+export KUBE_EDITOR='code --wait'
+#Edit resource
+kubectl edit <resource type> <resource name> --namespace <namespace>
+#Check Worker nodes
+kubectl get nodes
+kubectl get nodes --watch
+#Check Namespace
+kubectl get namespaces
+#Check Pods
+kubectl get pods
+kubectl get pods -A
+#Check resource
+kubectl get <resource type> <resource name> --namespace <namespace>
+```
+### Helm
+```bash
+#Check Helm repository
+helm repo list
+#Add a Helm repository
+helm repo add <repository name> <Repository URL>
+#Remove a Helm repository
+helm repo remove <repository name>
+#Update Helm repository
+helm repo update
+#Search Helm repository
+helm search <keyword>
+helm search repo <keyword>
+#Helm upgrade and install chart
+helm upgrade  --install <release> --namespace <namespace>  <chart directory>
+#Helm uninstall chart
+helm uninstall <release> --namespace <namespace>
+#Helm Roll back chart
+helm rollback <release> <revision number>
+#Helm download chart 
+helm pull <repository name> <path of charts>
+#Helm Download Release
+helm get manifest <release name>
+#Helm generate manifest
+helm template <chart directory>
+```
 ### LXC/LXD
 - Image
 ```bash
