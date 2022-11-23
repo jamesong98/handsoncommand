@@ -64,6 +64,28 @@ docker-compose down
 #Resolve the variable, combine multiple compose stack into one (tweak in .env file)
 docker-compose config
 ```
+### Containerd
+#### Containerd Cli
+- Image
+    ```bash
+    #List Image
+    ctr image list
+    #List Image that pull by Kubernetes (K8S)
+    ctr --namespace k8s.io image list
+    #Pull Image
+    ctr image pull <image path or URL>
+    #Pull Image with authentication
+    ctr image pull --user <user:password> <image path or URL>
+    #Delete image
+    ctr image delete  <image path or URL>
+    ```
+- Container
+    ```bash
+    #List Containers
+    ctr containers list
+    #List Containers that launched by Kubernetes (K8S)
+    ctr --namespace k8s.io containers list
+    ```
 ### Kubernetes (K8S)
 ```bash
 #Download KubeConfig (AWS)
