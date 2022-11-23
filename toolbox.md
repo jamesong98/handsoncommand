@@ -16,6 +16,10 @@
     docker rmi -f $(docker images -f "dangling=true" -q)
     #Build Image
     docker build -t <image tag name:version> <directory of Dockerfile>
+    #Export Image
+    docker save -o <path with .tar extension> <image name and tag>
+    #Import Image
+    docker load -i <path with .tar extension>
 
     ```
   
