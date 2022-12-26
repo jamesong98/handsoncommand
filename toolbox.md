@@ -511,11 +511,17 @@ mysqlbinlog <bin log file> --base64-output=DECODE-ROWS
 Invoke-WebRequest -UseBasicParsing "<URL>" -OutFile <filename>
 Start-BitsTransfer -Source "<URL>" -Destination <filename>
 ```
+### Check Public IP
+```powershell
+$(Invoke-WebRequest -UseBasicParsing "https://ifconfig.me").RawContent
+```
 ### Here docs
 ```powershell
-$CONTENT = @"
+# Using double quote may not escape text that have dollar symbol
+$CONTENT = @'
 <Content of the file>
-"@
+'@
+
 Set-Content "<Path>" $CONTENT
 ```
 ### Port Test
@@ -526,6 +532,12 @@ Test-NetConnection <url/ip> -p <port number>
 ```powershell
 # Start a process and wait it continue only proceed to next step
 Start-Process -FilePath <path for binary> -Args "<Argument to pass>" -Wait
+```
+### Check Process Command Line
+```powershell
+Get-WmiObject Win32_Process -Filter "Name='<process name>.exe'" | select-object commandline
+Get-WmiObject Win32_Process -Filter "name = '<process name>.exe'" | Format-Table -Property CommandLine -AutoSize | Out-String -Width 4096 | Select-String -Pattern '<key word>'
+Get-WmiObject Win32_Process | Select-Object ProcessId, CommandLine | Where-Object -Property CommandLine -like "*<key word>*"
 ```
 ### Robocopy
 ```powershell
