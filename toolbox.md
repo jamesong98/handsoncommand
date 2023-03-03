@@ -341,7 +341,12 @@ grep -C <number line before and after> <simple world pattern> <filename>
 pgrep <process name>
 ```
 #### heredoc
+```bash
+cat > <filename> <<EOF
+<Multiline Content>
+EOF
 
+```
 ### File
 #### find
 ```bash
@@ -506,6 +511,20 @@ mysqlbinlog <bin log file> --base64-output=DECODE-ROWS
 
 # Windows
 ## PowerShell
+### Execution Policy
+```powershell
+#By default Windows do not run any .ps1 file due to the Execution Policy is Restricted
+#Show current state of Execution Policy on different level
+Get-ExecutionPolicy -List
+Set-ExecutionPolicy -ExecutionPolicy <Policy type> -Scope <Scope>
+#available Policy type AllSigned,RemoteSigned,Bypass,Restricted
+#available Scope MachinePolicy,UserPolicy,Process,CurrentUser,LocalMachine
+```
+### Check Single Folder/Directory Size
+```powershell
+(Get-ChildItem <folderpath> -Recurse | Measure Length -s).sum /1<size>
+#size available 1Gb,1Mb,1Kb
+```
 ### Download Files
 ```powershell
 Invoke-WebRequest -UseBasicParsing "<URL>" -OutFile <filename>
@@ -569,12 +588,18 @@ msbuild <path to csproj> /p:Configuration=Release /p:Platform=x64 /p:OutputPath=
 dotnet nuget add source  "<URL>" -n "<Name>"
 # Restore NuGet Packages
 dotnet nuget restore
+# Clear local NuGet cache
+dotnet nuget locals all -c
 # Build a csproj file
 dotnet build "<path to csproj>" -c Release -o <artifacts folder name>
 
 ```
 ### nuget
 ```powershell
+<#
+Directory of configuration file
+%APPDATA%\NuGet\NuGet.Config
+#>
 # Add NuGet Source
 nuget sources add -Name "<Name>" -Source <URL>
 # Restore NuGet packages
@@ -605,17 +630,39 @@ netsh interface portproxy reset
 netsh interface portproxy add v4tov4 listenaddress=127.0.0.1 listenport=9000 connectaddress=192.168.0.10 connectport=80
 ::delete port forward 3340
 netsh interface portproxy delete v4tov4 listenport=3340 listenaddress=10.1.1.110
-
+:: packet capture status
+netsh trace show status
+::packet capture start
+netsh trace start capture=yes IPv4.SourceAddress=<Source IP> tracefile=<Path to save>.etl
+::packet capture stop
+netsh trace stop
 ```
+- Install the following tools to convert
+- [etl2pcapng](https://github.com/microsoft/etl2pcapng/releases/download/v1.10.0/etl2pcapng.exe)
+- ```bat
+  etl2pcapng.exe <source file name>.etl <new file name>.pcapng
+  ```
 
 
 
 # FortiOS
 - Sniffer
   ```sh
-  diagnose sniffer packer <interface> "port <port number>"
-  # available value --> port, host
+  dianose sniffer packet <interface> "filter" 5 0 l
+  #5 means print header and data from ip of packets with interface name
+  #0 means unlimited count of packet until Ctrl + C issue
+  #l means local time
+  #Example
+  diagnose sniffer packet <interface> "port <port number>"
+  # available value --> port, host,tcp,src,dst
+  # available operator --> and,or
   ```
+  - Save the terminal output and remove line like `` then install the following tools to convert
+  - [fgt2eth](https://community.fortinet.com/tpykb84852/attachments/tpykb84852/TKB20/1935/1/fgt2eth.exe)
+  - ```sh
+    fgt2eth -in <source file name> -out <output file name>.pcap
+    ````
+  - Open the \<output file name\>.pcap with wireshark
 - Ping
   ```sh
   #change ping source ip
